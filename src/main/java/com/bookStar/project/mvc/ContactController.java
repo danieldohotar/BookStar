@@ -47,7 +47,7 @@ public class ContactController {
         if (!bindingResult.hasErrors()) {
             try {
                 contactService.save(contact);
-                RedirectView redirectView = new RedirectView("/contact");
+                RedirectView redirectView = new RedirectView("/contact/add");
                 modelAndView.setView(redirectView);
             } catch (ValidationException ex) {
 
@@ -80,5 +80,20 @@ public class ContactController {
         ModelAndView modelAndView = new ModelAndView("contact/add");
         modelAndView.addObject("contact", new Contact ());
         return modelAndView;
+    }
+    @RequestMapping("/delete")
+    public String delete(long id) {
+        contactService.delete(id);
+        return "redirect:/contact/tableMessages";
+    }
+
+    @RequestMapping("/tableMessages")
+    public ModelAndView tableMessage() {
+        ModelAndView result = new ModelAndView("books/tableMessages");
+
+        Collection<Contact> contact = contactService.listAll();
+        result.addObject("contact", contact);
+
+        return result;
     }
 }
